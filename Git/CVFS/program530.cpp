@@ -1,0 +1,148 @@
+/////////////////////////////////////////////////////////////////////////
+//      
+//      Header file Inclusion
+//
+/////////////////////////////////////////////////////////////////////////
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<stdbool.h>
+#include<string.h>
+
+/////////////////////////////////////////////////////////////////////////
+//      
+//      User Defined MACROS      
+//
+/////////////////////////////////////////////////////////////////////////
+
+// Maximum file size is allowed in the project
+#define MAXFILESIZE 50
+
+// Maximum number of files we can open
+#define MAXOPENFILES 20
+
+// Maximum number of Inode are allowed
+#define MAXINODE 5
+
+// Permission
+#define READ 1
+#define WRITE 3
+#define EXECUTE 4
+
+// lseek() function self defined
+#define START 0
+#define CURRENT 1
+#define END 2
+
+// To flag success
+#define EXECUTE_SUCCESS 0
+
+/////////////////////////////////////////////////////////////////////////
+//      
+//      User Defined Structures      
+//
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
+//      
+//      Structures Name :   BootBlock 
+//      Description     :   Hold the information to boot the OS
+//
+/////////////////////////////////////////////////////////////////////////
+struct BootBlock
+{
+    char Information[100];
+};
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Structures Name :   SuperBlock 
+//      Description     :   Hold the information about the file Systems
+//
+///////////////////////////////////////////////////////////////////
+
+struct SuperBlock
+{
+    int TotalInode;
+    int FreeInode;
+};
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Structures Name :   Inode
+//      Description     :   Hold the information about the file
+//
+///////////////////////////////////////////////////////////////////
+
+#pragma (1)
+struct Inode
+{
+    char FileName[20];              // Data Block
+    int InodeNumber;
+    int FileSize;
+    int ActualFileSize;
+    int ReferenceCount;
+    int Permission;
+    char *Buffer;                   // points to data block
+    struct Inode *next;             // LinkedList DILB
+};
+
+typedef struct Inode INODE;
+typedef struct Inode* PINODE;
+typedef struct Inode** PPINODE;
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Structures Name :   FileTable
+//      Description     :   Hold the information about the opened file
+//
+///////////////////////////////////////////////////////////////////
+
+struct FileTable
+{
+    int ReadOffSet;
+    int WriteOffSet;
+    int Mode;
+    PINODE ptrinode;            // points to iNode 
+};
+
+typedef FileTable FILETABLE;
+typedef FileTable* PFILETABLE;
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Structures Name :   UAREA
+//      Description     :   Hold the information about Process
+//
+///////////////////////////////////////////////////////////////////
+
+struct UAREA                                    // RAM Data Strucure
+{
+    char ProcessName[20];
+    PFILETABLE UFDT[MAXOPENFILES];              // Arr of Pointer
+};
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Global variable or object used in the project     
+//
+///////////////////////////////////////////////////////////////////
+
+BootBlock bootobj;
+SuperBlock superobj;
+UAREA uareaobj;
+
+PINODE head = NULL;             //data section
+
+///////////////////////////////////////////////////////////////////
+//      
+//      Entry Point Function of the Project      
+//
+///////////////////////////////////////////////////////////////////
+
+int main()
+{
+    
+
+    return 0;
+}
